@@ -2,10 +2,10 @@ var board;
 var score=0;
 var rows=4;
 var columns=4;
+var startx, starty, endx, endy;
 
 window.onload = function(){
     setgame();
-
 }
 
 function setgame(){
@@ -39,6 +39,23 @@ function setgame(){
     setTwo();
     setTwo();
     document.getElementById("new-game").addEventListener("click", newgame);
+    document.getElementById("inst").addEventListener('click', showinstructions);
+
+    // Swipe controls
+    const boardEl = document.getElementById('board');
+    boardEl.addEventListener('touchstart', handleTouchStart, false);
+    boardEl.addEventListener('touchmove', handleTouchMove, false);
+    boardEl.addEventListener('touchend', handleTouchEnd, false);
+}
+
+function showinstructions(){
+    var instructions = document.getElementById('gameInstructions');
+  if (instructions.style.display === 'none') {
+    instructions.style.display = 'block';
+  } else {
+    instructions.style.display = 'none';
+  }
+
 }
 
 function hasemptytile(){
@@ -253,4 +270,43 @@ function slideDown(){
         }
 
     }
+}
+
+// Swipe controls
+function handleTouchStart(event) {
+    const touch = event.touches[0];
+    startx = touch.clientX;
+    starty = touch.clientY;
+}
+
+function handleTouchMove(event) {
+    event.preventDefault();
+}
+
+function handleTouchEnd(event) {
+    const touch = event.changedTouches[0];
+    endx = touch.clientX;
+    endy = touch.clientY;
+    handleSwipe();
+}
+
+function handleSwipe() {
+    const distancex = endx - startx;
+    const distancey = endy - starty;
+    if (Math.abs(distancex) > Math.abs(distancey)) {
+        if (distancex > 0) {
+            slideRight();
+        } else {
+            slideLeft();
+        }
+    } else {
+        if (distancey > 0) {
+            slideDown();
+        } else {
+            slideUp();
+        }
+    }
+    setTwo();
+    document.getElementById("score").innerText = score;
+    checkGameStatus();
 }
