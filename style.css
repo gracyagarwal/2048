@@ -160,6 +160,11 @@ button{
         justify-content: center;
         margin: 20px;
     }
+    .tile{
+        width: 88px;
+        height: 91px;
+        border: 5px solid #bbada0;
+    }
     
 }
 
